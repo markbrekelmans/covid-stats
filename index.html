@@ -9,7 +9,7 @@
       google.charts.setOnLoadCallback(drawChart);
 
       function drawChart() {
-        $.get("data.csv", function(csvString) {
+        $.get("/data/data.csv", function(csvString) {
           var arrayData = $.csv.toArrays(csvString, {onParseValue: $.csv.hooks.castToScalar});
 
           var data = new google.visualization.DataTable();
@@ -25,10 +25,12 @@
           };
 
           var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+
           chart.draw(data, options);
         });
       }
     </script>
+    <link href="/css/main.css" rel="stylesheet">
     <title>Charts</title>
   </head>
 
