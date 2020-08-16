@@ -16,8 +16,15 @@
 
           data.addColumn('string', 'Topping');
           data.addColumn('number', 'Slices');
-          data.addRows(arrayData);
+          //data.addRows(arrayData);
 
+          for(var row=0; row<arrayData.length; row++) {
+            data.addRow([
+                arrayData[row][0],
+                arrayData[row][1]
+            ]);
+          }
+          
           var options = {
             title: 'How much pizza I ate last night',
             width: 400,
@@ -36,5 +43,6 @@
 
   <body>
     <div id="chart_div">Loading...</div>
+    <div id="data_loop"></div>
   </body>
 </html>

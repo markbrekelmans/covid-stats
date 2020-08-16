@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.11/jquery.csv.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        $.get("/data/COVID-19_aantallen_gemeente_cumulatief.csv", function(csvString) {
+          var arrayData = $.csv.toArrays(csvString, {"separator" : ";", onParseValue: $.csv.hooks.castToScalar});
+
+          var data = new google.visualization.DataTable();
+
+          data.addColumn('string', 'Timestamp');
+          //data.addColumn('string', 'Gemeente');
+          data.addColumn('number', 'Cases');
+
+          for(var row=1; row<arrayData.length; row++) {
+            data.addRow([
+                arrayData[row][0],
+                //arrayData[row][3],
+                arrayData[row][4]
+            ]);
+          }
+
+          var result = google.visualization.data.group(
+            data,
+            [0],
+            [{'column': 1, 'aggregation': google.visualization.data.sum, 'type': 'number'}]
+          );
+
+          var options = {
+            title: 'Reported cases NL',
+            width: 900,
+            height: 500,
+            aggregationTarget: 'category'
+          };
+
+          var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+          chart.draw(result, options);
+        });
+      }
+    </script>
+    <link href="/css/main.css" rel="stylesheet">
+    <title>Charts</title>
+  </head>
+
+  <body>
+    <div id="chart_div">Loading...</div>
+  </body>
+</html>
