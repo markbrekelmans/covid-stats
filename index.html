@@ -1,48 +1,35 @@
+<!doctype html>
 <html>
   <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.11/jquery.csv.min.js"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      google.charts.load('current', {'packages':['corechart']});
+    <meta charset="utf-8">
+    <title>COVID-19 trend in Nederland</title>
 
-      google.charts.setOnLoadCallback(drawChart);
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-      function drawChart() {
-        $.get("/data/data.csv", function(csvString) {
-          var arrayData = $.csv.toArrays(csvString, {onParseValue: $.csv.hooks.castToScalar});
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
 
-          var data = new google.visualization.DataTable();
+    <!--link rel="manifest" href="site.webmanifest"-->
+    <link rel="apple-touch-icon" href="icon.png">
 
-          data.addColumn('string', 'Topping');
-          data.addColumn('number', 'Slices');
-          //data.addRows(arrayData);
-
-          for(var row=0; row<arrayData.length; row++) {
-            data.addRow([
-                arrayData[row][0],
-                arrayData[row][1]
-            ]);
-          }
-          
-          var options = {
-            title: 'How much pizza I ate last night',
-            width: 400,
-            height: 400
-          };
-
-          var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-
-          chart.draw(data, options);
-        });
-      }
-    </script>
-    <link href="/css/main.css" rel="stylesheet">
-    <title>Charts</title>
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/main.css">
   </head>
 
   <body>
-    <div id="chart_div">Loading...</div>
-    <div id="data_loop"></div>
+    <div id="chart_div">
+      <div class="loader"></div>
+    </div>
+
+    <!-- scripts -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.11/jquery.csv.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="/js/vendor/modernizr-3.11.2.min.js"></script>
+    <script type="text/javascript" src="/js/plugins.js"></script>
+    <script type="text/javascript" src="/js/main.js"></script>
   </body>
 </html>
