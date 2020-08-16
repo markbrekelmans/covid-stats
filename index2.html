@@ -1,55 +1,33 @@
+<!doctype html>
 <html>
   <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.11/jquery.csv.min.js"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      google.charts.load('current', {'packages':['corechart']});
-
-      google.charts.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-        $.get("/data/COVID-19_aantallen_gemeente_cumulatief.csv", function(csvString) {
-          var arrayData = $.csv.toArrays(csvString, {"separator" : ";", onParseValue: $.csv.hooks.castToScalar});
-
-          var data = new google.visualization.DataTable();
-
-          data.addColumn('string', 'Timestamp');
-          //data.addColumn('string', 'Gemeente');
-          data.addColumn('number', 'Cases');
-
-          for(var row=1; row<arrayData.length; row++) {
-            data.addRow([
-                arrayData[row][0],
-                //arrayData[row][3],
-                arrayData[row][4]
-            ]);
-          }
-
-          var result = google.visualization.data.group(
-            data,
-            [0],
-            [{'column': 1, 'aggregation': google.visualization.data.sum, 'type': 'number'}]
-          );
-
-          var options = {
-            title: 'Reported cases NL',
-            width: 900,
-            height: 500,
-            aggregationTarget: 'category'
-          };
-
-          var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-
-          chart.draw(result, options);
-        });
-      }
-    </script>
-    <link href="/css/main.css" rel="stylesheet">
+    <meta charset="utf-8">
     <title>Charts</title>
+
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+
+    <!--link rel="manifest" href="site.webmanifest"-->
+    <link rel="apple-touch-icon" href="icon.png">
+
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/main.css">
   </head>
 
   <body>
     <div id="chart_div">Loading...</div>
+
+    <!-- scripts -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.11/jquery.csv.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="/js/vendor/modernizr-3.11.2.min.js"></script>
+    <script type="text/javascript" src="/js/plugins.js"></script>
+    <script type="text/javascript" src="/js/main.js"></script>
   </body>
 </html>
