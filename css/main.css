@@ -17,6 +17,7 @@ html {
   color: #222;
   font-size: 1em;
   line-height: 1.4;
+  font-family: 'Roboto';
 }
 
 /*
@@ -91,6 +92,10 @@ textarea {
 
 #chart_div {
   margin: 10px;
+}
+
+#vis {
+  padding: 10px;
 }
 
 .loader {

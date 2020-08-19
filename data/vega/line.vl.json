@@ -1,0 +1,29 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "description": "A simple line chart",
+  "width": 900,
+  "heigh": 500,
+  "data": {
+    "url": "/data/COVID-19_aantallen_gemeente_cumulatief.csv",
+    "format": {
+      "type": "dsv",
+      "delimiter": ";",
+      "parse": {
+        "Date_of_report": "date:%Y-%m-%d %H:%M:%S"
+      }
+    }
+  },
+  "mark": "point",
+  "encoding": {
+    "x": {
+      "field": "Date_of_report",
+      "timeUnit": "yearmonthdate",
+      "title": "Date"
+    },
+    "y": {
+      "aggregate": "sum",
+      "field": "Total_reported",
+      "title": "Cases"
+    }
+  }
+}
