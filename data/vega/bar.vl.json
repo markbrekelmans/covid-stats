@@ -14,23 +14,47 @@
       {"a": "E", "b": 7}
     ]
   },
-  "mark": "bar",
-  "encoding": {
-    "x": {
-      "field": "a",
-      "type": "nominal",
-      "title": "Category"
-    },
-    "y": {
-      "aggregate": "sum",
-      "field": "b",
-      "type": "quantitative",
-      "title": "Total value"
-    },
-    "tooltip": {
-      "aggregate": "sum",
-      "field": "b",
-      "type": "quantitative"
+  "transform": [
+    {
+      "window": [{
+        "op": "sum",
+        "field": "b",
+        "as": "running_total"
+      }],
+      "frame": [-2,0]
     }
-  }
+  ],
+  "layer": [
+    {
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "a",
+          "type": "nominal",
+          "title": "Category"
+        },
+        "y": {
+          "aggregate": "sum",
+          "field": "b",
+          "type": "quantitative",
+          "title": "Total value"
+        },
+        "tooltip": {
+          "aggregate": "sum",
+          "field": "b",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "mark": "rule",
+      "encoding": {
+        "y": {
+          "field": "running_total",
+          "type": "quantitative"
+        },
+        "color": {"value":"red"}
+      }
+    }
+  ]
 }

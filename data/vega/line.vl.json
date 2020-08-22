@@ -13,17 +13,43 @@
       }
     }
   },
-  "mark": "point",
-  "encoding": {
-    "x": {
-      "field": "Date_of_report",
-      "timeUnit": "yearmonthdate",
-      "title": "Date"
+  "transform": [
+    {
+      "joinaggregate": [{
+        "op": "sum",
+        "field": "Total_reported",
+        "as": "total_cases"
+      }],
+      "groupby": ["Date_of_report"]
     },
-    "y": {
-      "aggregate": "sum",
-      "field": "Total_reported",
-      "title": "Cases"
+    {
+      "calculate": "datum.total_cases",
+      "as": "delta_cases"
+    },
+    {
+      "window": [{
+        "op": "row_number",
+        "field": "Total_reported",
+        "as": "new_cases"
+      }],
+      "groupby": ["Date_of_report"],
+      "frame": [null,null],
+      "sort": [{"field": "Date_of_report", "order": "ascending"}]
     }
-  }
+  ],
+  "layer": [
+    {
+      "mark": "line",
+      "encoding": {
+        "x": {
+          "timeUnit": "yearmonthdate",
+          "field": "Date_of_report"
+        },
+        "y": {
+          "field": "new_cases",
+          "type": "quantitative"
+        }
+      }
+    }
+  ]
 }
