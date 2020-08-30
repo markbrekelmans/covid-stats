@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
+    <meta name="description" content="Informatie over de trend van COVID-19 in Nederland">
     <meta name="author" content="Mark Brekelmans">
 
     <title>COVID-19 trend in Nederland</title>
@@ -15,18 +15,7 @@
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <style>
-    body {
-      padding-top: 5rem;
-    }
-
-    .figure .figure-img {
-      height: 600px;
-    }
-
-    .starter-template {
-      padding: 3rem 1.5rem;
-      text-align: center;
-    }
+    body{padding-top:5rem}a,a:visited,a:hover{color:#3740ff}.figure{margin-bottom:5rem}.figure-img{height:600px}.starter-template{padding:3rem 1.5rem;text-align:left}
     </style>
   </head>
 
@@ -36,7 +25,6 @@
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
@@ -48,16 +36,29 @@
           <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
         </form>
       </div>
-    </nav>
-
+    </nav><!-- /navbar -->
     <main role="main" class="container">
       <div class="starter-template">
         <div class="row">
           <div class="col">
             <h1>COVID-19 trend in Nederland</h1>
-            <p class="lead">Data voor grafieken op deze pagina wordt direct ingeladen van <a href="https://data.rivm.nl/covid-19/" target="_blank" title="data.rivm.nl">data.rivm.nl</a>.</p>
-            <figure class="figure">
+            <p class="lead">Op deze pagina staan grafieken die de trend van het aantal COVID-19 gevallen in Nederland weergeven. De data hiervoor is afkomstig van <a href="https://data.rivm.nl/covid-19/" target="_blank" rel="noreferrer" title="data.rivm.nl">data.rivm.nl</a>.</p>
+          </div><!-- /col -->
+        </div><!-- /row -->
+        <div class="row">
+          <div class="col">
+            <figure class="figure"><!-- line chart -->
               <div class="figure-img img-fluid rounded" id="chart_A_div">
+                <div class="d-flex justify-content-center">
+                  <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </div>
+              </div>
+              <figcaption class="figure-caption">In bovenstaande grafiek zijn het aantal nieuwe gevallen gerapporteerd in de afgelopen 7 dagen en het totaal aantal gevallen cumulatief uitgezet over de rapportage datum. Dit geeft weer hoeveel gevallen er op een bepaalde dag bijkomen.</figcaption>
+            </figure>
+            <figure class="figure"><!-- scatter chart -->
+              <div class="figure-img img-fluid rounded" id="chart_B_div">
                 <div class="d-flex justify-content-center">
                   <div class="spinner-border" role="status">
                     <span class="sr-only">Loading...</span>
@@ -66,149 +67,70 @@
               </div>
               <figcaption class="figure-caption">In bovenstaande grafiek zijn het totaal aantal gerapporteerde gevallen (x-as) uitgezet tegenover het nieuw aantal gerapporteerde gevallen in de afgelopen 7 dagen (y-as). Beiden assen zijn logaritmisch weergegeven. Op deze manier geeft een lijn met een constant hellingsgetal exponenti&euml;le groei aan.</figcaption>
             </figure>
-
-            <figure class="figure">
-              <div class="figure-img img-fluid rounded" id="chart_B_div">
+            <figure class="figure"><!-- table chart -->
+              <div class="figure-img img-fluid rounded" id="chart_C_div">
                 <div class="d-flex justify-content-center">
                   <div class="spinner-border" role="status">
                     <span class="sr-only">Loading...</span>
                   </div>
                 </div>
               </div>
-              <figcaption class="figure-caption">In bovenstaande grafiek zijn het aantal nieuwe gevallen gerapporteerd in de afgelopen 7 dagen uitgezet over de rapportage datum.<br />Dit geeft weer hoeveel gevallen er op een bepaalde dag bijkomen.</figcaption>
             </figure>
-          </div>
-        </div>
-      </div>
-    </main><!-- /.container -->
-
-    <!-- scripts -->
+          </div><!-- /col -->
+        </div><!-- /row -->
+      </div><!-- /starter-template -->
+    </main><!-- /container -->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="/assets/js/plugins.js"></script>
     <script type="text/javascript">
     google.charts.load('current', {'packages': ['table', 'corechart']});
-
     google.charts.setOnLoadCallback(initiate);
 
-    var options_A = {
-      title: 'COVID-19 curve in Nederland vs. exponentiele groei',
-      hAxis: {title: 'Totaal gerapporteerde gevallen', logScale: true, baseline: 1, format: 'short', titleTextStyle: {fontSize: 12}},
-      vAxis: {title: 'Nieuw gerapporteerde gevallen \n(afgelopen week)', logScale: true, baseline: 1, format: 'short', titleTextStyle: {fontSize: 12}},
-      legend: {position:'bottom'},
-      interpolateNulls: true,
-      series: {
-        0: {color: '#556F44'},
-        1: {color: '#99DDC8', lineDashStyle: [2,1]}
-      },
-      //width: window.innerWidth-200,
-      height: 600
-    }
-
-    var options_B = {
-      title: 'Nieuw gerapporteerde gevallen in de afgelopen week',
-      hAxis: {title: 'Rapportage datum', titleTextStyle: {fontSize: 12}},
-      vAxis: {title: 'Nieuw gerapporteerde gevallen \n(afgelopen week)', logScale: false, baseline: 1, format: 'short', titleTextStyle: {fontSize: 12}},
-      legend: {position:'none'},
-      interpolateNulls: true,
-      series: {
-        0: {color: '#556F44'}
-      },
-      //width: window.innerWidth-200,
-      height: 600
-    }
+    var options_scatter={title:'Totaal gerapporteerde gevallen t.o.v. nieuwe gevallen afgelopen week',titleTextStyle:{fontSize:20},hAxis:{title:'Totaal gerapporteerde gevallen (cumulatief)',logScale:!0,minValue:0,maxValue:100000,format:'short',titleTextStyle:{fontSize:12}},vAxis:{title:'Nieuw gerapporteerde gevallen (afgelopen week)',logScale:!0,minValue:0,maxValue:100000,format:'short',titleTextStyle:{fontSize:12}},legend:{position:'none'},series:{0:{color:'#556F44'}}}
+    var options_line={title:'Ontwikkelingen in gerapporteerde COVID-19 gevallen in Nederland',titleTextStyle:{fontSize:20},series:{0:{targetAxisIndex:0,color:'#556F44'},1:{targetAxisIndex:1,color:'#99DDC8'}},hAxis:{title:'Rapportage datum',titleTextStyle:{fontSize:12}},vAxis:{format:'short',titleTextStyle:{fontSize:12}},vAxes:{0:{title:'Totaal gerapporteerde gevallen (cumulatief)'},1:{title:'Nieuw gerapporteerde gevallen (afgelopen week)'}},legend:{position:'none'}}
+    var options_table={width:400,sortColumn:0,sortAscending:false}
 
     function initiate() {
       $.get('https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_cumulatief.csv', function(csvData) {
         var arrData = $.csv.toArrays(csvData, {'separator': ';', onParseValue: $.csv.hooks.castToScalar});
 
-        var dtA = new google.visualization.DataTable();
-        dtA.addColumn('date', 'Date');
-        dtA.addColumn('number', 'Totaal aantal gevallen');
-
-        dtA.addRows([
-          [new Date('2020-03-05'), 82],
-          [new Date('2020-03-06'), 128],
-          [new Date('2020-03-07'), 188],
-          [new Date('2020-03-08'), 265],
-          [new Date('2020-03-09'), 321],
-          [new Date('2020-03-10'), 382],
-          [new Date('2020-03-11'), 503],
-          [new Date('2020-03-12'), 503]
-        ]);
+        var main_table = new google.visualization.DataTable();
+        main_table.addColumn('date', 'Date');
+        main_table.addColumn('number', 'Totaal aantal gevallen');
+        main_table.addRows([[new Date('2020-03-01'),0],[new Date('2020-03-02'),0],[new Date('2020-03-03'),0],[new Date('2020-03-04'),0],[new Date('2020-03-05'),82],[new Date('2020-03-06'),128],[new Date('2020-03-07'),188],[new Date('2020-03-08'),265],[new Date('2020-03-09'),321],[new Date('2020-03-10'),382],[new Date('2020-03-11'),503],[new Date('2020-03-12'),503]])
 
         for(var r=1; r<arrData.length; r++) {
-          dtA.addRow([
+          main_table.addRow([
             new Date(arrData[r][0].substring(0,10)),
             arrData[r][4]
           ])
         }
 
-        var dtA = google.visualization.data.group(
-          dtA, [0], [{'column': 1, 'aggregation': google.visualization.data.sum, 'type': 'number'}]
-        );
+        var main_table = google.visualization.data.group(main_table,[0],[{'column':1,'aggregation':google.visualization.data.sum,'type':'number'}]);
 
-        var dvA = new google.visualization.DataView(dtA);
-        dvA.setColumns([
-          1,
-          {
-            calc: deltaPrev,
-            type: 'number',
-            label: 'Nieuwe gevallen'
-          },
-          0
-        ]);
+        var main_view = new google.visualization.DataView(main_table);
+        main_view.setColumns([0,1,{calc:deltaPrev,type:'number',label:'Nieuwe gevallen'}]);
 
-        function deltaPrev(dtA, rowNum){
-          return (rowNum<7) ? Math.floor(dtA.getValue(rowNum, 1) - dtA.getValue(0, 1)) : Math.floor(dtA.getValue(rowNum, 1) - dtA.getValue(Math.max(0,rowNum-7), 1));
+        function deltaPrev(main_table, rowNum){
+          return (rowNum<7) ? Math.floor(main_table.getValue(rowNum, 1) - main_table.getValue(0, 1)) : Math.floor(main_table.getValue(rowNum, 1) - main_table.getValue(Math.max(0,rowNum-7), 1));
         }
 
-        //
-        // set-up table and view B
-        //
-        $.get('/data/logref.csv', function(csvData) {
-          var arrData = $.csv.toArrays(csvData, {'separator': ';', onParseValue: $.csv.hooks.castToScalar});
-          var dtB = new google.visualization.DataTable();
-          dtB.addColumn('number', 'Totaal aantal gevallen');
-          dtB.addColumn('number', 'Exponentiele groei');
+        var graph_view = new google.visualization.DataView(main_view);
+        graph_view.setColumns([1,2])
 
-          for(var r=0; r<arrData.length; r++) {
-            dtB.addRow([
-              arrData[r][0],
-              arrData[r][1]
-            ])
-          }
+        var chartA = new google.visualization.LineChart(document.getElementById('chart_A_div'));
+        chartA.draw(main_view, options_line);
 
-          var dvB = new google.visualization.DataView(dtB);
+        var chartB = new google.visualization.LineChart(document.getElementById('chart_B_div'));
+        chartB.draw(graph_view, options_scatter);
 
-          var dvC = new google.visualization.data.join(dvA,dvB,'full',[[0,0]],[1],[1]);
-
-          var dvD = dvA;
-          dvD.setColumns([
-            0,
-            {
-              calc: deltaPrev,
-              type: 'number',
-              label: 'Nieuwe gevallen'
-            }
-          ]);
-
-          //
-          // draw the chart
-          //
-          var chartA = new google.visualization.LineChart(document.getElementById('chart_A_div'));
-          chartA.draw(dvC, options_A);
-
-          var chartB = new google.visualization.LineChart(document.getElementById('chart_B_div'));
-          chartB.draw(dvD, options_B);
-        });
+        var chartC = new google.visualization.Table(document.getElementById('chart_C_div'));
+        chartC.draw(main_view, options_table);
       });
     }
-
-    window.onresize = function(event) {
-        initiate();
-    }
+    window.onresize=function(event){initiate();}
     </script>
   </body>
 </html>
