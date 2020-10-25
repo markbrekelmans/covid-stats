@@ -87,6 +87,19 @@
         <div class="row">
           <div class="col">
             <figure class="figure">
+              <div class="figure-img img-fluid rounded" id="viz-5">
+                <div class="d-flex justify-content-center">
+                  <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </div>
+              </div>
+            </figure>
+          </div><!-- /col -->
+        </div><!-- /row -->
+        <div class="row">
+          <div class="col">
+            <figure class="figure">
               <div class="figure-img img-fluid rounded" id="viz-4">
                 <div class="d-flex justify-content-center">
                   <div class="spinner-border" role="status">
@@ -111,6 +124,7 @@
       var options_viz_02 = {title:'Cumulatieve gevallen',titleTextStyle:{fontSize:16},series:{0:{color:'#E63946'}},hAxis:{title:'Rapportage datum',titleTextStyle:{fontSize:12}},vAxis:{format:'short',titleTextStyle:{fontSize:12}},legend:{position:'none'}}
       var options_viz_03 = {title:'Cumulatieve vs. 7-daagse gevallen',titleTextStyle:{fontSize:16},hAxis:{title:'Cumulatieve gevallen',logScale:!0,minValue:0,maxValue:100000,format:'short',titleTextStyle:{fontSize:12}},vAxis:{title:'7-daagse gevallen',logScale:!0,minValue:0,maxValue:100000,format:'short',titleTextStyle:{fontSize:12}},legend:{position:'none'},series:{0:{color:'#E63946'}}}
       var options_viz_04 = {page:'enable',pageSize:20,sortColumn:0,sortAscending:0,width:'100%'}
+      var options_viz_05 = {title:'Verschillen',titleTextStyle:{fontSize:16},series:{0:{color:'#E63946'}},hAxis:{title:'Rapportage datum',titleTextStyle:{fontSize:12}},vAxis:{format:'short',titleTextStyle:{fontSize:12}},legend:{position:'none'}}
 
       function initiate() {
         $.get('https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_cumulatief.csv', function(csvData) {
@@ -132,6 +146,17 @@
 
           function movingAverage(main_table,rowNum){return (rowNum<7) ? Math.floor(main_table.getValue(rowNum, 1) - main_table.getValue(0, 1)) : Math.floor(main_table.getValue(rowNum, 1) - main_table.getValue(Math.max(0,rowNum-7), 1))}
           function deltaPrev(main_table,rowNum){return Math.max(0,Math.floor(main_table.getValue(rowNum, 1) - main_table.getValue(Math.max(0,rowNum-1),1)))}
+          function slopeFactor(main_table,rowNum){
+            pVal = main_table.getValue(rowNum, 1);
+            qVal = main_table.getValue(Math.max(0,rowNum-1),1);
+            rVal = main_table.getValue(Math.max(0,rowNum-2),1);
+            sVal = main_table.getValue(Math.max(0,rowNum-3),1);
+
+            iVal = pVal - qVal
+            jVal = qVal - rVal
+
+            return iVal - jVal;
+          }
 
           var view_viz_01 = new google.visualization.DataView(main_table);
           view_viz_01.setColumns([0,{calc:deltaPrev,type:'number',label:'Dagelijkse gevallen'}]);
@@ -140,7 +165,10 @@
           view_viz_03.setColumns([1,{calc:movingAverage,type:'number',label:'7-daagse gevallen'}]);
 
           var view_viz_04 = new google.visualization.DataView(main_table);
-          view_viz_04.setColumns([0,1,{calc:deltaPrev,type:'number',label:'Dagelijkse gevallen'},{calc:movingAverage,type:'number',label:'7-daagse gevallen'}]);
+          view_viz_04.setColumns([0,1,{calc:deltaPrev,type:'number',label:'Dagelijkse gevallen'},{calc:slopeFactor,type:'number',label:'Verschil'},{calc:movingAverage,type:'number',label:'7-daagse gevallen'}]);
+
+          var view_viz_05 = new google.visualization.DataView(main_table);
+          view_viz_05.setColumns([0,{calc:slopeFactor,type:'number',label:'Verschil dag-tot-dag'}]);
 
           var viz_01 = new google.visualization.AreaChart(document.getElementById('viz-1'));
           viz_01.draw(view_viz_01, options_viz_01);
@@ -153,6 +181,9 @@
 
           var viz_04 = new google.visualization.Table(document.getElementById('viz-4'));
           viz_04.draw(view_viz_04, options_viz_04);
+
+          var viz_05 = new google.visualization.LineChart(document.getElementById('viz-5'));
+          viz_05.draw(view_viz_05, options_viz_05);
         });
       }
       window.onresize=function(event){initiate();}
